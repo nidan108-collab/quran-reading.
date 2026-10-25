@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123d32">
+<title>Коран — тренажёр чтения</title>
+<style>
+:root{--green:#123d32;--green2:#1c5b49;--gold:#d8b56a;--bg:#f5f7f4;--card:#fff;--ink:#17231e;--muted:#68766f;--red:#b83c38;--ok:#18794e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(135deg,var(--green),var(--green2));color:white;padding:25px 18px 28px;border-radius:0 0 26px 26px}
+header .eyebrow{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#d9e9df}h1{margin:7px 0 5px;font-size:27px}header p{margin:0;color:#e2eee7;font-size:14px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:16px 14px 40px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:-7px}
+.tab{border:1px solid #dce5df;border-radius:15px;background:white;padding:14px 10px;text-align:left;color:var(--ink);font-weight:700;cursor:pointer}
+.tab small{display:block;font-weight:500;color:var(--muted);margin-top:5px;line-height:1.35}.tab.active{background:#e3eee8;border:2px solid var(--green2);padding:13px 9px}
+.card{background:var(--card);border:1px solid #e4eae5;border-radius:18px;padding:18px;margin-top:14px;box-shadow:0 3px 12px #153b2b08}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.label{font-size:13px;color:var(--muted);font-weight:650}
+select,button{font:inherit}select{border:1px solid #d3ded6;border-radius:10px;background:white;padding:10px;max-width:100%}
+.arabic{font-family:"Noto Naskh Arabic","Amiri","Scheherazade New",serif;font-size:30px;line-height:2.05;text-align:center;direction:rtl;margin:18px 0 10px;color:#173d31}
+.translation{text-align:center;color:var(--muted);font-size:14px;line-height:1.5}
+.btn{border:0;border-radius:12px;padding:12px 16px;background:var(--green);color:white;font-weight:700;cursor:pointer}
+.btn.secondary{background:#edf3ef;color:var(--green)}.btn.gold{background:#f5e9c9;color:#654b12}.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.status{margin-top:13px;padding:12px;border-radius:12px;background:#f1f5f2;font-size:14px;line-height:1.5}.status.good{background:#e5f5eb;color:#145b38}.status.warn{background:#fff3dd;color:#76500b}.status.bad{background:#fdebea;color:#8a2925}
+.words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}.word{border:1px solid #dce5df;border-radius:10px;padding:8px 10px;font-family:serif;font-size:23px;direction:rtl}.word.ok{background:#e4f5e9;border-color:#75c38e}.word.miss{background:#fdebea;border-color:#e4a19c}
+.rule{border:1px solid #e2e9e3;border-radius:13px;padding:13px;margin-top:10px}.rule h3{margin:0 0 5px;font-size:16px}.rule p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.checkline{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;line-height:1.45}.checkline input{margin-top:4px;transform:scale(1.15)}
+.meter{height:8px;background:#e7ece8;border-radius:99px;overflow:hidden;margin-top:8px}.meter span{display:block;height:100%;background:var(--green2);width:0%}
+footer{color:var(--muted);font-size:12px;line-height:1.55;text-align:center;padding:18px 10px}
+.hidden{display:none!important}.small{font-size:12px;color:var(--muted);line-height:1.5}
+@media(min-width:600px){header{padding-left:max(24px,calc((100vw - 720px)/2));padding-right:max(24px,calc((100vw - 720px)/2))}.arabic{font-size:37px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Тренажёр чтения</div>
+  <h1>Коран: читай правильно</h1>
+  <p>Два уровня практики: точность слов и основы таджвида.</p>
+</header>
+<main>
+  <div class="tabs">
+    <button class="tab active" id="tabWords" onclick="showMode('words')">Уровень 1 <small>Проверка слов и порядка</small></button>
+    <button class="tab" id="tabTajwid" onclick="showMode('tajwid')">Уровень 2 <small>Практика таджвида</small></button>
+  </div>
+
+  <section id="wordsMode">
+    <div class="card">
+      <div class="row"><div><div class="label">СУРА И АЯТ</div><strong>Аль-Фатиха</strong></div>
+      <label class="label">Аят
+        <select id="ayahSelect" onchange="loadAyah()">
+          <option value="0">1 — بِسْمِ اللَّهِ</option><option value="1">2 — الْحَمْدُ لِلَّهِ</option>
+          <option value="2">3 — الرَّحْمَٰنِ الرَّحِيمِ</option><option value="3">4 — مَالِكِ يَوْمِ الدِّينِ</option>
+          <option value="4">5 — إِيَّاكَ نَعْبُدُ</option><option value="5">6 — اهْدِنَا الصِّرَاطَ</option>
+          <option value="6">7 — صِرَاطَ الَّذِينَ</option>
+        </select>
+      </label></div>
+      <div class="arabic" id="ayahArabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      <div class="translation" id="ayahTranslation">Во имя Аллаха, Милостивого, Милосердного.</div>
+      <div class="actions">
+        <button class="btn" id="listenBtn" onclick="startRecognition()">🎙 Начать чтение</button>
+        <button class="btn secondary" onclick="showWords()">Показать слова</button>
+      </div>
+      <div id="recognitionStatus" class="status">Нажми «Начать чтение» и прочитай аят вслух. Разреши доступ к микрофону.</div>
+      <div class="label" style="margin-top:16px">РАСПОЗНАННЫЙ ТЕКСТ</div>
+      <div id="recognized" style="margin-top:7px;line-height:1.6">Пока нет записи.</div>
+      <div class="label" style="margin-top:16px">СРАВНЕНИЕ С ТЕКСТОМ АЯТА</div>
+      <div class="words" id="wordComparison"></div>
+      <div class="small">Важно: распознавание арабской речи зависит от браузера, микрофона и произношения. Эта проверка помогает заметить возможные пропуски, но не является авторитетной проверкой чтения Корана.</div>
+    </div>
+  </section>
+
+  <section id="tajwidMode" class="hidden">
+    <div class="card">
+      <div class="label">УРОВЕНЬ 2 · ТАДЖВИД</div>
+      <h2 style="margin:5px 0 8px">Проверь правила при чтении</h2>
+      <p class="small">Прочитай выбранный аят вслух, затем отметь, на что обратил внимание. Чек-лист помогает тренироваться, но приложение пока не анализирует акустически махрадж, длительность мадда или гунну.</p>
+      <div class="arabic" id="tajwidArabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      <div class="actions"><button class="btn" onclick="startRecognition(true)">🎙 Прочитать аят</button><button class="btn secondary" onclick="loadAyah()">Синхронизировать аят</button></div>
+      <div id="tajwidResult" class="status">После чтения отметь пункты ниже. Для достоверной оценки таджвида попроси квалифицированного преподавателя проверить запись.</div>
+      <div class="rule"><h3>1. Махрадж — место выхода букв</h3><p>Произноси арабские буквы из правильного места артикуляции, не заменяя похожие звуки.</p><label class="checkline"><input type="checkbox" class="tajCheck"> Я старался(ась) произносить каждую букву из её правильного махраджа.</label></div>
+      <div class="rule"><h3>2. Мадд — протяжённость</h3><p>Соблюдай длительность долгих гласных согласно правилу и месту в аяте.</p><label class="checkline"><input type="checkbox" class="tajCheck"> Я выдерживал(а) нужную длительность мадда.</label></div>
+      <div class="rule"><h3>3. Гунна — носовой оттенок</h3><p>Обращай внимание на гунну там, где она требуется, например в правилах نّ и مّ.</p><label class="checkline"><input type="checkbox" class="tajCheck"> Я соблюдал(а) гунну там, где она требуется.</label></div>
+      <div class="rule"><h3>4. Остановки и соединение</h3><p>Соблюдай правила вакфа и ибтида: где остановиться и откуда продолжить чтение.</p><label class="checkline"><input type="checkbox" class="tajCheck"> Я сделал(а) остановку и продолжение осознанно.</label></div>
+      <div class="rule"><h3>5. Темп чтения</h3><p>Читай размеренно, без спешки и без добавления лишних гласных.</p><label class="checkline"><input type="checkbox" class="tajCheck"> Я читал(а) спокойно и не торопился(ась).</label></div>
+      <div class="actions"><button class="btn" onclick="scoreTajwid()">Подвести итог</button><button class="btn secondary" onclick="resetChecks()">Сбросить отметки</button></div>
+      <div id="tajwidScore" class="status hidden"></div>
+    </div>
+  </section>
+  <footer>Учебный прототип. Текст Аль-Фатихи приведён для практики. Для правильного и благоговейного чтения Корана сверяйся с проверенным мусхафом и учителем таджвида.</footer>
+</main>
+<script>
+const ayahs=[
+ {ar:"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",tr:"Во имя Аллаха, Милостивого, Милосердного."},
+ {ar:"الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",tr:"Хвала Аллаху, Господу миров."},
+ {ar:"الرَّحْمَٰنِ الرَّحِيمِ",tr:"Милостивому, Милосердному."},
+ {ar:"مَالِكِ يَوْمِ الدِّينِ",tr:"Властелину Дня воздаяния."},
+ {ar:"إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",tr:"Тебе одному мы поклоняемся и Тебя одного молим о помощи."},
+ {ar:"اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",tr:"Веди нас прямым путём."},
+ {ar:"صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",tr:"Путём тех, кого Ты облагодетельствовал, не тех, на кого пал гнев, и не заблудших."}
+];
+let recognition=null;
+function showMode(mode){document.getElementById('wordsMode').classList.toggle('hidden',mode!=='words');document.getElementById('tajwidMode').classList.toggle('hidden',mode!=='tajwid');document.getElementById('tabWords').classList.toggle('active',mode==='words');document.getElementById('tabTajwid').classList.toggle('active',mode==='tajwid');}
+function loadAyah(){let a=ayahs[+document.getElementById('ayahSelect').value];document.getElementById('ayahArabic').textContent=a.ar;document.getElementById('ayahTranslation').textContent=a.tr;document.getElementById('tajwidArabic').textContent=a.ar;document.getElementById('recognitionStatus').textContent='Аят выбран. Нажми «Начать чтение».';document.getElementById('recognized').textContent='Пока нет записи.';document.getElementById('wordComparison').innerHTML='';}
+function normalize(s){return (s||'').normalize('NFD').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/[^\u0600-\u06FF\s]/g,' ').replace(/\s+/g,' ').trim();}
+function showWords(rec=''){let a=ayahs[+document.getElementById('ayahSelect').value];let expected=normalize(a.ar).split(' ');let said=normalize(rec).split(' ').filter(Boolean);let html=expected.map((w,i)=>{let ok=said.includes(w);return `<span class="word ${rec?(ok?'ok':'miss'):''}">${w}</span>`}).join('');document.getElementById('wordComparison').innerHTML=html;}
+function startRecognition(tajwid=false){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById(tajwid?'tajwidResult':'recognitionStatus').className='status warn';document.getElementById(tajwid?'tajwidResult':'recognitionStatus').textContent='Этот браузер не поддерживает распознавание речи. Попробуй открыть приложение в Chrome на Android и разрешить микрофон.';return;}
+ recognition=new SR();recognition.lang='ar-SA';recognition.interimResults=false;recognition.maxAlternatives=1;
+ let status=document.getElementById(tajwid?'tajwidResult':'recognitionStatus');status.className='status';status.textContent='Слушаю… Читай аят.';
+ recognition.onresult=e=>{let text=e.results[0][0].transcript;document.getElementById('recognized').textContent=text;showWords(text);status.className='status good';status.textContent='Распознано браузером. Сверь результат со словами ниже: автоматическое распознавание может ошибаться.';if(tajwid)document.getElementById('tajwidResult').textContent='Речь распознана как текст, но это не измеряет правильность таджвида. Отметь правила, которые ты соблюдал(а), и подведи итог.';};
+ recognition.onerror=e=>{status.className='status warn';status.textContent='Не удалось распознать речь ('+e.error+'). Проверь разрешение микрофона и подключение к интернету.';};
+ recognition.onend=()=>{};try{recognition.start()}catch(e){status.textContent='Не удалось запустить микрофон. Попробуй ещё раз.';}
+}
+function scoreTajwid(){let all=[...document.querySelectorAll('.tajCheck')];let n=all.filter(c=>c.checked).length;let box=document.getElementById('tajwidScore');box.classList.remove('hidden');box.className='status '+(n===5?'good':'warn');box.textContent='Отмечено '+n+' из '+all.length+' пунктов. Это самооценка, а не автоматический вердикт о правильности таджвида.';}
+function resetChecks(){document.querySelectorAll('.tajCheck').forEach(c=>c.checked=false);document.getElementById('tajwidScore').classList.add('hidden');}
+loadAyah();
+</script>
+</body>
+</html>
